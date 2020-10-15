@@ -18,14 +18,15 @@ public class Range {
         List<Range> res = new ArrayList<Range>();
         if (lst.isEmpty() || lst == null) return res;//edge case
         List<Range> lstReorder = lst.stream().sorted(Comparator.comparing(Range::getIdx0)).collect(Collectors.toList());//sort lst by idx0
-        int prevIdx1 = 0;
+        int prevIdx0 = 0, prevIdx1 = 0;
         for (Range r : lstReorder){
             if (res.isEmpty() || prevIdx1 < r.idx0) {//'prevIdx1 == r.idx0' is not included
                 res.add(r);
                 prevIdx1 = r.idx1;
+                prevIdx0 = r.idx0;
             } else {
                 prevIdx1 = Math.max(prevIdx1, r.idx1);
-                res.set(res.size()-1, new Range(res.get(res.size()-1).idx0, prevIdx1));
+                res.set(res.size()-1, new Range(prevIdx0, prevIdx1));
             }
         }
         return res;
@@ -52,8 +53,8 @@ public class Range {
 // test case 1 After: [[19104,19104], [93100,93400]]
 // test case 2 Before: [[94133,94133], [94200,94299], [94600,94699]]
 // test case 2 After: [[94133,94133], [94200,94299], [94600,94699]]
-// test case 3 Before: [[11112,11113], [11112,22222], [11111,33333]]
-// test case 3 After: [[11111,33333]]
+// test case 3 Before: [[11112,11113], [11111,22222], [0,33333]]
+// test case 3 After: [[0,33333]]
     }
 }
 
